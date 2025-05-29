@@ -1,40 +1,61 @@
 import "../assets/App.css";
-import Input from "../components/Input";
+import { useEffect, useReducer } from "react";
+import Board from "../components/Board";
+import { ConfigContext, defaultConfig } from "../assets/ConfigContext.tsx";
+import { BoardReducer } from "../assets/BoardReducer.ts";
 
-import { createContext } from "react";
+type WordStatus = "correct" | "incorretPosition" | "incorrect" | null;
 
-interface Config {
-  worlds: string[];
-  maxGuesses: number;
-  worldLength: number;
-  getRandomWorld: () => string;
+export interface WordInput {
+  char: string | null;
+  status: WordStatus;
 }
 
-const config: Config = {
-  worlds: ["test1", "test3", "test4"],
-  maxGuesses: 5,
-  worldLength: 5,
-  getRandomWorld: function () {
-    return this.worlds[Math.floor(Math.random() * this.worlds.length)];
-  },
-};
-
-function Board() {
-  const fields = [];
-
-  for (let i = 0; i < config.worldLength * 6; i++) {
-    fields.push(<Input key={i} value={i} />);
-  }
-
-  return <div className={"row"}>{fields}</div>;
-}
+const initialState: WordInput[] = Array.from(
+  { length: defaultConfig.wordLength * 6 },
+  () => ({ char: null, status: null }),
+);
 
 function App() {
+  const [wordsArray, dispatch] = useReducer(BoardReducer, initialState);
+
+  function changeFirstEmptyCell(char: string) {
+    dispatch({
+      type: "SET_CHAR",
+      char,
+    });
+  }
+
+  function removeLastChar() {
+    dispatch({
+      type: "REMOVE_LAST_CHAR",
+    });
+  }
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const key = event.key;
+      if (key.length === 1 && /^[a-zA-Z]$/.test(key)) {
+        changeFirstEmptyCell(key.toUpperCase());
+      }
+      if (key === "Backspace") {
+        removeLastChar();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <>
       <h1>Wordle game</h1>
       <div id="game-box">
-        <Board />
+        <ConfigContext.Provider value={defaultConfig}>
+          <Board wordsArray={wordsArray} />
+        </ConfigContext.Provider>
       </div>
     </>
   );
