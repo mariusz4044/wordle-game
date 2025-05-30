@@ -1,45 +1,44 @@
 import "../assets/App.css";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import Board from "../components/Board";
 import { ConfigContext, defaultConfig } from "../assets/ConfigContext.tsx";
 import { BoardReducer } from "../assets/BoardReducer.ts";
 
-type WordStatus = "correct" | "incorretPosition" | "incorrect" | null;
+type WordStatus = "correct" | "incorrect-position" | "incorrect" | null;
 
 export interface WordInput {
   char: string | null;
   status: WordStatus;
+  position: number;
 }
 
 const initialState: WordInput[] = Array.from(
   { length: defaultConfig.wordLength * 6 },
-  () => ({ char: null, status: null }),
+  (_v: number, index: number) => ({
+    char: null,
+    status: null,
+    position: index + 1,
+  }),
 );
 
 function App() {
   const [wordsArray, dispatch] = useReducer(BoardReducer, initialState);
-
-  function changeFirstEmptyCell(char: string) {
-    dispatch({
-      type: "SET_CHAR",
-      char,
-    });
-  }
-
-  function removeLastChar() {
-    dispatch({
-      type: "REMOVE_LAST_CHAR",
-    });
-  }
+  const randomWord = useRef(defaultConfig.getRandomWorld());
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       const key = event.key;
       if (key.length === 1 && /^[a-zA-Z]$/.test(key)) {
-        changeFirstEmptyCell(key.toUpperCase());
+        dispatch({
+          type: "SET_CHAR",
+          char: key.toUpperCase(),
+          randomWord: randomWord.current,
+        });
       }
       if (key === "Backspace") {
-        removeLastChar();
+        dispatch({
+          type: "REMOVE_LAST_CHAR",
+        });
       }
     }
 

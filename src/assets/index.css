@@ -13,8 +13,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
 body {
   margin: 0;
   display: flex;
@@ -30,15 +28,41 @@ body {
   flex-direction: column;
 }
 
-#game-box input{
+.word-input{
   width: 60px;
   height: 60px;
   font-size: 40px;
-  text-align: center;
   background: rgb(57, 57, 57);
-  border: 1px solid gray;
+  border: 1px solid #424242;
   border-radius: 6px;
   user-focus: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 200ms linear;
+}
+
+.position-checked  {
+  opacity: 0.5;
+}
+
+.incorrect-position {
+  background: rgba(228, 144, 0, 0.4);
+  border: 1px solid rgba(255, 160, 2, 0.42);
+}
+
+.incorrect {
+  /*current we dont need do anything;*/
+}
+
+.correct {
+  background: rgba(42, 165, 0, 0.4);
+  border: 1px solid rgba(41, 156, 0, 0.4);
+}
+
+.char {
+  font-size: 35px;
+  animation: showWord 0.1s linear;
 }
 
 textarea:focus, input:focus{
@@ -52,4 +76,15 @@ textarea:focus, input:focus{
   width: 100%;
   grid-gap: 5px;
   margin-top: 5px;
+}
+
+@keyframes showWord {
+  from {
+    opacity: 0;
+    font-size: 10px;
+  }
+  to {
+    opacity: 1;
+    font-size: 35px;
+  }
 }
