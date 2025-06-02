@@ -1,5 +1,5 @@
 import "../assets/App.css";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import Board from "../components/Board";
 import { ConfigContext, defaultConfig } from "../assets/ConfigContext.tsx";
 import { BoardReducer } from "../assets/BoardReducer.ts";
@@ -32,7 +32,7 @@ function App() {
 
   const endStatisExist = !!wordsArray.find((item) => item.status === "endgame");
   const emptyFields =
-    wordsArray.filter((item) => item.char !== null).length - 30;
+    30 - wordsArray.filter((item) => item.char !== null).length;
 
   let gamesIsEnd = false;
 
@@ -94,6 +94,7 @@ function App() {
           ) : (
             ""
           )}
+          {emptyFields === 30 ? <h2>please click the key...</h2> : ""}
         </ConfigContext.Provider>
       </div>
     </>

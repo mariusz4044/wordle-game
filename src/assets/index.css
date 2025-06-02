@@ -64,6 +64,11 @@ body {
   opacity: 0.1;
 }
 
+#game-box h2 {
+  font-size: 12px;
+  opacity: 0.3;
+}
+
 .reset-btn {
   margin-top: 20px;
   width: 90%;
