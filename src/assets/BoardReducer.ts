@@ -16,8 +16,20 @@ function checkWorlds(words: WordInput[], word: string): WordInput[] {
     if (!lastSix[i].char) continue;
     const char = lastSix[i].char;
 
+    // in words with multiple letters, we need to check all letters,
+    // for example, "maybe", if the user writes 2 times "m" letter, it should show only one correct
+    // without this check user can see status for 2 "m" letters correct and incorrect-position
+    const charsInWord = word.split("").filter((item) => item === char);
+    const correctChars = lastSix.filter(
+      (item) => item.char === char && item.status !== null,
+    );
+
     if (char === word[i]) lastSix[i].status = "correct";
-    else if (char && word.includes(char))
+    else if (
+      char &&
+      word.includes(char) &&
+      correctChars.length < charsInWord.length
+    )
       lastSix[i].status = "incorrect-position";
     else lastSix[i].status = "incorrect";
   }

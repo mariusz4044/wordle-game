@@ -41,7 +41,8 @@ function App() {
   }
 
   async function getRandomWord() {
-    const rndWord = await defaultConfig.getRandomWorld();
+    // const rndWord = await defaultConfig.getRandomWorld();
+    const rndWord = "mambe";
     randomWord.current = rndWord;
     console.log(`Random word: ${rndWord} :-)`);
   }
@@ -89,7 +90,7 @@ function App() {
           <Board wordsArray={wordsArray} />
           {gamesIsEnd ? (
             <button className={"reset-btn"} onClick={resetGame}>
-              reset game
+              reset game (word: {randomWord.current})
             </button>
           ) : (
             ""
