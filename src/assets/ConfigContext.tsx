@@ -8,18 +8,7 @@ export type Config = {
 };
 
 export const defaultConfig: Config = {
-  words: [
-    "jablo",
-    "piase",
-    "lampa",
-    "mosty",
-    "brzoz",
-    "karty",
-    "domki",
-    "rzeka",
-    "tynki",
-    "wazon",
-  ],
+  words: ["jablo", "piase"],
   wordLength: 5,
   getRandomWorld: function () {
     return this.words[Math.floor(Math.random() * this.words.length)];

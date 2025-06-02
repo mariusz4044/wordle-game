@@ -60,6 +60,10 @@ body {
   border: 1px solid rgba(41, 156, 0, 0.4);
 }
 
+.endgame {
+  opacity: 0.1;
+}
+
 .char {
   font-size: 35px;
   animation: showWord 0.1s linear;

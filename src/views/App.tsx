@@ -4,7 +4,12 @@ import Board from "../components/Board";
 import { ConfigContext, defaultConfig } from "../assets/ConfigContext.tsx";
 import { BoardReducer } from "../assets/BoardReducer.ts";
 
-type WordStatus = "correct" | "incorrect-position" | "incorrect" | null;
+type WordStatus =
+  | "correct"
+  | "incorrect-position"
+  | "incorrect"
+  | "endgame"
+  | null;
 
 export interface WordInput {
   char: string | null;

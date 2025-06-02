@@ -7,7 +7,7 @@ type BoardAction =
 function checkWorlds(words: WordInput[], word: string): WordInput[] {
   word = word.toUpperCase();
 
-  //get only last 5 chars
+  //we need to get only the last six words
   const filtered = words.filter((item) => item.char !== null);
   const lastSix = filtered.slice(-5);
 
@@ -21,9 +21,14 @@ function checkWorlds(words: WordInput[], word: string): WordInput[] {
     else lastSix[i].status = "incorrect";
   }
 
-  //TODO add block user interact after win.
-  //const correctChars = lastSix.filter((item) => item.status === "correct");
-  // if (correctChars.length === 5)
+  const correctChars = lastSix.filter((item) => item.status === "correct");
+
+  //show a user win and block other inputs
+  if (correctChars.length === 5) {
+    words.forEach((item) => {
+      if (item.status === null) item.status = "endgame";
+    });
+  }
 
   return words;
 }
@@ -42,8 +47,10 @@ export function BoardReducer(
       if (!firstEmptyCell) return state;
       firstEmptyCell.char = action.char;
 
+      //check the worlds if user has entered the last word
       if (firstEmptyCell.position % 5 === 0)
         return checkWorlds(words, action.randomWord);
+
       return words;
     }
     case "REMOVE_LAST_CHAR": {
