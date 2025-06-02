@@ -41,8 +41,7 @@ function App() {
   }
 
   async function getRandomWord() {
-    // const rndWord = await defaultConfig.getRandomWorld();
-    const rndWord = "mambe";
+    const rndWord = await defaultConfig.getRandomWorld();
     randomWord.current = rndWord;
     console.log(`Random word: ${rndWord} :-)`);
   }
