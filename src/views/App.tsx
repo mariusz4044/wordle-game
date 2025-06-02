@@ -1,5 +1,5 @@
 import "../assets/App.css";
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import Board from "../components/Board";
 import { ConfigContext, defaultConfig } from "../assets/ConfigContext.tsx";
 import { BoardReducer } from "../assets/BoardReducer.ts";
@@ -28,29 +28,36 @@ const initialState: WordInput[] = Array.from(
 
 function App() {
   const [wordsArray, dispatch] = useReducer(BoardReducer, initialState);
-  const randomWord = useRef(defaultConfig.getRandomWorld());
+  const randomWord = useRef<string>("");
 
   useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      const key = event.key;
-      if (key.length === 1 && /^[a-zA-Z]$/.test(key)) {
-        dispatch({
-          type: "SET_CHAR",
-          char: key.toUpperCase(),
-          randomWord: randomWord.current,
-        });
-      }
-      if (key === "Backspace") {
-        dispatch({
-          type: "REMOVE_LAST_CHAR",
-        });
-      }
-    }
+    async function initGame() {
+      const rndWord = await defaultConfig.getRandomWorld();
+      randomWord.current = rndWord;
+      console.log(`Random word: ${rndWord} :-)`);
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+      function handleKeyDown(event: KeyboardEvent) {
+        const key = event.key;
+        if (key.length === 1 && /^[a-zA-Z]$/.test(key)) {
+          dispatch({
+            type: "SET_CHAR",
+            char: key.toUpperCase(),
+            randomWord: randomWord.current,
+          });
+        }
+        if (key === "Backspace") {
+          dispatch({
+            type: "REMOVE_LAST_CHAR",
+          });
+        }
+      }
+
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+    initGame();
   }, []);
 
   return (

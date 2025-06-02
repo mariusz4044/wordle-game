@@ -2,16 +2,21 @@
 import { createContext } from "react";
 
 export type Config = {
-  words: string[];
+  wordsApi: string;
   wordLength: number;
-  getRandomWorld: () => string;
+  getRandomWorld: () => Promise<string>;
 };
 
 export const defaultConfig: Config = {
-  words: ["jablo", "piase"],
+  wordsApi: "https://random-word-api.vercel.app/api?words=1&length=5",
   wordLength: 5,
-  getRandomWorld: function () {
-    return this.words[Math.floor(Math.random() * this.words.length)];
+  getRandomWorld: async function () {
+    const res = await fetch(this.wordsApi, {
+      method: "GET",
+    });
+
+    const jsonResponse = (await res.json()) as string[];
+    return jsonResponse[0] as string;
   },
 };
 
