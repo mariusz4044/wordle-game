@@ -2,7 +2,8 @@ import type { WordInput } from "../views/App.tsx";
 
 type BoardAction =
   | { type: "SET_CHAR"; char: string; randomWord: string }
-  | { type: "REMOVE_LAST_CHAR" };
+  | { type: "REMOVE_LAST_CHAR" }
+  | { type: "RESET_GAME" };
 
 function checkWorlds(words: WordInput[], word: string): WordInput[] {
   word = word.toUpperCase();
@@ -38,6 +39,15 @@ export function BoardReducer(
   action: BoardAction,
 ): WordInput[] {
   switch (action.type) {
+    case "RESET_GAME": {
+      const words = [...state];
+      words.forEach((item) => {
+        item.char = null;
+        item.status = null;
+      });
+      return words;
+    }
+
     case "SET_CHAR": {
       const words = [...state];
       const firstEmptyCell = words.find(

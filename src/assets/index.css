@@ -64,6 +64,20 @@ body {
   opacity: 0.1;
 }
 
+.reset-btn {
+  margin-top: 20px;
+  width: 90%;
+  height: 100px;
+  background: rgb(57, 57, 57);
+  border: 1px solid #424242;
+  border-radius: 6px;
+  padding: 10px 0 10px 0;
+  user-focus: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .char {
   font-size: 35px;
   animation: showWord 0.1s linear;

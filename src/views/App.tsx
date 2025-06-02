@@ -30,11 +30,32 @@ function App() {
   const [wordsArray, dispatch] = useReducer(BoardReducer, initialState);
   const randomWord = useRef<string>("");
 
+  const endStatisExist = !!wordsArray.find((item) => item.status === "endgame");
+  const emptyFields =
+    wordsArray.filter((item) => item.char !== null).length - 30;
+
+  let gamesIsEnd = false;
+
+  if (endStatisExist || emptyFields === 0) {
+    gamesIsEnd = true;
+  }
+
+  async function getRandomWord() {
+    const rndWord = await defaultConfig.getRandomWorld();
+    randomWord.current = rndWord;
+    console.log(`Random word: ${rndWord} :-)`);
+  }
+
+  async function resetGame() {
+    await getRandomWord();
+    dispatch({
+      type: "RESET_GAME",
+    });
+  }
+
   useEffect(() => {
     async function initGame() {
-      const rndWord = await defaultConfig.getRandomWorld();
-      randomWord.current = rndWord;
-      console.log(`Random word: ${rndWord} :-)`);
+      await getRandomWord();
 
       function handleKeyDown(event: KeyboardEvent) {
         const key = event.key;
@@ -66,6 +87,13 @@ function App() {
       <div id="game-box">
         <ConfigContext.Provider value={defaultConfig}>
           <Board wordsArray={wordsArray} />
+          {gamesIsEnd ? (
+            <button className={"reset-btn"} onClick={resetGame}>
+              reset game
+            </button>
+          ) : (
+            ""
+          )}
         </ConfigContext.Provider>
       </div>
     </>
